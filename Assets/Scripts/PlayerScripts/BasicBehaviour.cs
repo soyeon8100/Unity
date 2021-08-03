@@ -64,6 +64,11 @@ public class BasicBehaviour : MonoBehaviour
 		anim.SetTrigger("OnAttack");
 	}
 
+	public void GetItem()
+    {
+		anim.SetTrigger("GetItem");
+	}
+
 	void Update()
 	{
 		// Store the input axes.

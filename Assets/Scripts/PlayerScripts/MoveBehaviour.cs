@@ -13,6 +13,14 @@ public class MoveBehaviour : GenericBehaviour
 	public float jumpHeight = 1.5f;                 // Default jump height.
 	public float jumpIntertialForce = 10f;          // Default horizontal inertial force when jumping.
 
+	/// 아이템///
+	public GameObject[] weapons;
+	public bool[] hasWeapons;
+	public bool GetItem;
+	public bool sDown1;
+	public bool sDown2;
+	public bool sDown3;
+
 	private float speed, speedSeeker;               // Moving speed.
 	private int jumpBool;                           // Animator variable related to jumping.
 	private int dodgeBool;                          // Animator variable related to dodge.
@@ -20,8 +28,11 @@ public class MoveBehaviour : GenericBehaviour
 	private bool jump;                              // Boolean to determine whether or not the player started a jump.
 	private bool dodge;
 	private bool isColliding;                       // Boolean to determine if the player has collided with an obstacle.
-
 	private BasicBehaviour basicBehaviour;
+
+	//아이템 관련
+	GameObject nearObject;
+	GameObject equipWeapon;	
 	// Start is always called after any Awake functions.
 	void Start()
 	{
@@ -31,7 +42,6 @@ public class MoveBehaviour : GenericBehaviour
 													// Set up the references.
 		jumpBool = Animator.StringToHash("Jump");
 		dodgeBool = Animator.StringToHash("Dodge");
-
 		groundedBool = Animator.StringToHash("Grounded");
 		behaviourManager.GetAnim.SetBool(groundedBool, true);
 
@@ -42,10 +52,21 @@ public class MoveBehaviour : GenericBehaviour
 		behaviourManager.RegisterDefaultBehaviour(this.behaviourCode);
 		speedSeeker = runSpeed;
 	}
+	/*
+	void GetInput() 
+	{
+		sDown1 = Input.GetButtonDown("Swap1");
+		sDown2 = Input.GetButtonDown("Swap2");
+		sDown3 = Input.GetButtonDown("Swap3");
+	}
+	*/
 
 	// Update is used to set features regardless the active behaviour.
 	void Update()
 	{
+		//GetInput();
+		Swap();
+
 		// Get jump input.
 		if (!jump && !dodge && Input.GetButtonDown(jumpButton) && behaviourManager.IsCurrentBehaviour(this.behaviourCode) && !behaviourManager.IsOverriding())
 		{
@@ -59,7 +80,34 @@ public class MoveBehaviour : GenericBehaviour
 		{
 			basicBehaviour.OnAttack();
 		}
+		/*if (GetItem && nearObject != null && !jump && !dodge && Input.GetMouseButtonDown(0) && behaviourManager.IsCurrentBehaviour(this.behaviourCode) && !behaviourManager.IsOverriding())
+		{
+			basicBehaviour.GetItem();
+		}*/
 	}
+	void Swap()
+    {
+		int weaponIndex = -1;
+		if (sDown1) weaponIndex = 0;
+		if (sDown2) weaponIndex = 1;
+		if (sDown3) weaponIndex = 2;
+
+		if ((sDown1 || sDown2 || sDown3) && !jump && !dodge)
+		{
+			if (equipWeapon != null)
+            {
+				equipWeapon.SetActive(false);
+				equipWeapon = weapons[weaponIndex];
+				equipWeapon.SetActive(true);
+			}
+
+			else
+			{
+				equipWeapon = weapons[weaponIndex];
+				equipWeapon.SetActive(true);
+			}
+		}
+    }
 
 	// LocalFixedUpdate overrides the virtual function of the base class.
 	public override void LocalFixedUpdate()
@@ -70,8 +118,45 @@ public class MoveBehaviour : GenericBehaviour
 		// Call the jump manager.
 		JumpManagement();
 		DodgeManagement();
+		ItemManagement(); //아이템관련
+	}
+	//아이템 관련
+
+	void OnTriggerStay(Collider other)
+	{
+		if (other.tag == "Weapon")
+			nearObject = other.gameObject;
+
+		Debug.Log(nearObject.name);
+	}
+	void OnTriggerExit(Collider other)
+	{
+		if (other.tag == "Weapon")
+		nearObject = null;
 	}
 
+	void ItemManagement()
+    {
+		GetItem = Input.GetButton("ItemGet");
+		sDown1 = Input.GetButtonDown("Swap1");
+		sDown2 = Input.GetButtonDown("Swap2");
+		sDown3 = Input.GetButtonDown("Swap3");
+
+		if (GetItem && nearObject != null && !jump && !dodge)
+        {
+			if (nearObject.tag == "Weapon")
+			{
+				
+				Item item = nearObject.GetComponent<Item>();
+				int weaponIndex = item.value;
+				hasWeapons[weaponIndex] = true;
+
+				Destroy(nearObject);
+			}
+
+        }
+	}
+	
 	// Execute the idle and walk/run jump movements.
 	void JumpManagement()
 	{

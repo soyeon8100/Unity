@@ -61,16 +61,16 @@
     <Compile Include="Assets\Scripts\ItemScripts\Item.cs" />
     <Compile Include="Assets\Scripts\LevelScripts\ControlsTutorial.cs" />
     <Compile Include="Assets\Island\Scripts\FixedTiling.cs" />
+    <Compile Include="Assets\Scripts\PlayerScripts\BasicBehaviour.cs" />
+    <Compile Include="Assets\Scripts\PlayerScripts\AimBehaviourBasic.cs" />
     <Compile Include="Assets\CityPack\Standard Assets\Effects\ImageEffects\Scripts\SunShafts.cs" />
+    <Compile Include="Assets\Scripts\PlayerScripts\MoveBehaviour.cs" />
     <Compile Include="Assets\Scripts\LevelScripts\HintManagement.cs" />
     <Compile Include="Assets\CityPack\Standard Assets\Effects\ImageEffects\Scripts\Quads.cs" />
     <Compile Include="Assets\CityPack\DemoScene\FlyCamera.cs" />
+    <Compile Include="Assets\Scripts\PlayerScripts\FlyBehaviour.cs" />
     <Compile Include="Assets\CityPack\Standard Assets\Effects\ImageEffects\Scripts\PostEffectsBase.cs" />
     <Compile Include="Assets\Scripts\LevelScripts\ThirdPersonOrbitCamBasic.cs" />
-    <Compile Include="Assets\Scripts\PlayerScripts\MoveBehaviour.cs" />
-    <Compile Include="Assets\Scripts\PlayerScripts\AimBehaviourBasic.cs" />
-    <Compile Include="Assets\Scripts\PlayerScripts\FlyBehaviour.cs" />
-    <Compile Include="Assets\Scripts\PlayerScripts\BasicBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\CityPack\Standard Assets\Effects\ImageEffects\Shaders\SunShaftsComposite.shader" />
